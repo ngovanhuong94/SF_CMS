@@ -1,0 +1,24 @@
+{% extends 'blog/base.html' %}
+
+{% block full_width %}
+      <div class="row section-head">
+
+      	<div class="twelve columns">
+
+	         <h1>Search: {{q}}</h1>
+	         <p class="lead add-bottom">
+	         	Have {{pagination.total}} results for your search query
+	         </p>
+
+         </div>                 
+
+      </div> <!-- Row End-->
+{% endblock %}
+
+{% block content %}
+{% for post in posts %}
+	{% include 'blog/_post.html' %}
+{% endfor %}
+
+{% include 'blog/_pagination.html' %}
+{% endblock %}

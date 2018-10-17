@@ -1,0 +1,143 @@
+{% extends 'blog/base.html'%}
+
+{% block nav %}
+	{% if current_user.is_authenticated %}
+	<li><a href="{{url_for('admin.edit_post', post_id=post.id)}}">Edit This Post</a></li>
+	{% endif %}
+{% endblock %}
+
+{% block content %}
+<article class="entry">
+
+	<header class="entry-header">
+
+		<h2 class="entry-title">
+			{{post.title}}
+		</h2> 				 
+
+		<div class="entry-meta">
+			<ul>
+				<li>{{moment(post.timestamp).format('LL')}}</li>
+				<span class="meta-sep">&bull;</span>
+
+				<li>
+					<a href="#" title="" rel="category tag">{{post.category.name}}</a>  
+				</li>
+
+				<span class="meta-sep">&bull;</span>
+				<li>{{admin.name}}</li>
+				<span class="meta-sep">&bull;</span>
+				<li>{{views}} views</li>
+			</ul>
+		</div> 
+ 
+	</header> 
+
+	<!-- <div class="entry-content-media">
+		<div class="post-thumb">
+			<img src="images/m-farmerboy.jpg">
+		</div> 
+	</div> -->
+
+	<div class="entry-content">
+		{{post.body|safe}}
+	</div>
+
+	<p class="tags">
+         <span>Tagged in </span>:
+	      {% for tag in post.tags %}<a style="text-decoration: underline;" href="#">{{tag.name}}</a>&nbsp;&nbsp;{% endfor %}
+       </p> 
+
+       <ul class="post-nav group">
+            <li class="prev"><a rel="prev" href="{{url_for('blog.single_post', slug=post.previous.slug)}}"><strong>Previous Article</strong>{{post.previous.title}}</a></li>
+	         <li class="next"><a rel="next" href="{{url_for('blog.single_post', slug=post.next.slug)}}"><strong>Next Article</strong> {{post.next.title}}</a></li>
+        </ul>
+
+        {% if comments %}
+							<!-- Comments
+            ================================================== -->
+            <div id="comments">
+
+               <h3>{{pagination.total}} Comments</h3>
+
+               <!-- commentlist -->
+               <ol class="commentlist">
+               	{% for comment in comments %}
+                  <li class="depth-1">
+
+                     <div class="avatar">
+                        <img width="50" height="50" class="avatar" src="{{comment.avatar(a50)}}" alt="">
+                     </div>
+
+                     <div class="comment-content">
+
+	                     <div class="comment-info">
+	                        <cite>{% if comment.from_admin %}{{admin.name}}{% else %}{{comment.author}}{% endif %}</cite>
+
+	                        <div class="comment-meta">
+	                           <time class="comment-time" datetime="2014-07-12T23:05">{{moment(comment.timestamp).format('LL')}}</time>
+	                        </div>
+	                     </div>
+
+	                     <div class="comment-text">
+	                        <p>{{comment.body}}</p>
+	                     </div>
+
+	                  </div>
+
+                  </li>
+                 {% endfor %}
+               </ol> <!-- Commentlist End -->
+
+               {% include 'blog/_pagination.html' %}
+
+               <!-- respond -->
+               <div class="respond">
+
+                  <h3>Leave a Comment</h3>
+
+                  <!-- form -->
+                  <form name="contactForm" id="contactForm" method="post">
+                  		<input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+  					   <fieldset>
+  					  {% if not current_user.is_authenticated %}
+                     <div class="group">
+  						      <label for="cName">Name <span class="required">*</span></label>
+  						      <input name="author" type="text" id="cName" size="35" value="" />
+                     </div>
+
+                     <div class="group">
+  						      <label for="cEmail">Email <span class="required">*</span></label>
+  						      <input name="email" type="text" id="cEmail" size="35" value="" />
+                     </div>
+
+                     <div class="group">
+  						      <label for="cWebsite">Website</label>
+  						      <input name="site" type="text" id="cWebsite" size="35" value="" />
+                     </div>
+                     {% endif %}
+                     <div class="message group">
+                        <label  for="cMessage">Message <span class="required">*</span></label>
+                        <textarea name="message"  id="cMessage" rows="10" cols="50" ></textarea>
+                     </div>
+
+                     <button type="submit" class="submit">Submit</button>
+
+  					   </fieldset>
+  				      </form> <!-- Form End -->
+
+               </div> <!-- Respond End -->
+
+            </div>  <!-- Comments End -->			
+        {% endif %}
+</article>
+{% endblock %}
+
+{% block scripts %}
+	{{super()}}
+	<script type="text/javascript">
+		$('#open-reply').click(function () {
+			console.log('Hello')
+		})
+	</script>
+{% endblock %}

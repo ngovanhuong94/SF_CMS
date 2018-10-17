@@ -1,0 +1,25 @@
+<div class="row add-bottom">
+
+     <div class="twelve columns add-bottom">
+
+        <nav class="pagination add-bottom">
+
+           
+           {% if prev_url %}
+           <a href="{{prev_url}}" class="page-numbers prev">Prev</a>
+           {% else %}
+           <span class="page-numbers prev inactive">Prev</span>
+           {% endif %}
+           {% if next_url %}
+           <a href="{{next_url}}" class="page-numbers next">Next</a>
+           {% else %}
+           <span class="page-numbers next inactive">Next</span>
+	        {% endif %}
+
+	      </nav>
+
+     </div>
+
+     <hr />
+
+  </div> <!-- Row End-->

@@ -1,0 +1,9 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+
+{% for post in posts %}
+	{% include 'blog/_post.html' %} 	
+{% endfor %}
+	{% include 'blog/_pagination.html' %}
+{% endblock %}

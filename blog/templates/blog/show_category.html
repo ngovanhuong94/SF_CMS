@@ -1,0 +1,31 @@
+{% extends 'blog/base.html' %}
+
+{% block nav %}
+	{% if current_user.is_authenticated %}
+	<li><a href="{{url_for('admin.edit_category', category_id=category.id)}}">Edit Category</a></li>
+	{% endif %}
+{% endblock %}
+
+{% block full_width %}
+      <div class="row section-head">
+
+      	<div class="twelve columns">
+
+	         <h1>Category: {{category.name}}</h1>
+
+	         <p class="lead add-bottom">
+	         	{{category.description}}
+	         </p>
+
+         </div>                 
+
+      </div> <!-- Row End-->
+{% endblock %}
+
+{% block content %}
+{% for post in posts %}
+	{% include 'blog/_post.html' %}
+{% endfor %}
+
+{% include 'blog/_pagination.html' %}
+{% endblock %}

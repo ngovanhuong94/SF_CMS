@@ -1,0 +1,27 @@
+<article class="entry">
+	   			
+	<header class="entry-header">
+
+		<h2 class="entry-title">
+			<a href="{{url_for('blog.single_post', slug=post.slug)}}" title="">{{post.title}}</a>
+		</h2> 				 
+	
+		<div class="entry-meta">
+			<ul>
+				<li>{{moment(post.timestamp).format('LL')}}</li>
+				<span class="meta-sep">&bull;</span>								
+				<li>
+					<a href="#" title="" rel="category tag">{{post.category.name}}</a>  
+				</li>
+				<span class="meta-sep">&bull;</span>
+				<li>{{admin.name}}</li>
+			</ul>
+		</div> 
+	 
+	</header> 			
+
+	<div class="entry-content">
+		<p>{{post.description}}</p>
+	</div> 
+
+</article> <!-- end entry --> 

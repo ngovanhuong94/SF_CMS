@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{% block head %}
+   <!--- Basic Page Needs
+   ================================================== -->
+   <meta charset="utf-8">
+	<title>Keep It Simple.</title>
+	<meta name="description" content="">  
+	<meta name="author" content="">
+
+	<!-- mobile specific metas
+   ================================================== -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	
+   <!-- CSS
+    ================================================== -->
+    {% block styles %}
+   <link rel="stylesheet" href="{{ url_for('static', filename='blog/css/default.css')}}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='blog/css/layout.css')}}">  
+	<link rel="stylesheet" href="{{ url_for('static', filename='blog/css/media-queries.css')}}"> 
+	{% endblock %}
+   <!-- Script
+   ================================================== -->
+
+	<script src="{{ url_for('static', filename='blog/js/modernizr.js')}}"></script>
+
+   <!-- Favicons
+	================================================== -->
+	<link rel="shortcut icon" href="{{url_for('static', filename='favicon.png')}}" >
+	{% endblock %}
+</head>
+<body>
+	{% block header %}
+	   <!-- Header
+   ================================================== -->
+   <header id="top">
+
+   	<div class="row">
+
+   		<div class="header-content twelve columns">
+
+		      <h1 id="logo-text"><a href="{{url_for('blog.index')}}" title="">{{admin.blog_title}}.</a></h1>
+				<p id="intro">{{admin.blog_sub_title}}</p>
+
+			</div>			
+
+	   </div>
+
+	   <nav id="nav-wrap"> 
+
+	   	<a class="mobile-btn" href="#nav-wrap" title="Show navigation">Show Menu</a>
+		   <a class="mobile-btn" href="#" title="Hide navigation">Hide Menu</a>
+
+	   	<div class="row">    		            
+
+			   	<ul id="nav" class="nav">
+			      	<li class="current"><a href="{{url_for('blog.index')}}">Home</a></li>
+			      	<li class="has-children"><a href="#">Categorires</a>
+			      		{% if categories %}
+	                  	<ul>
+	                  		{% for category in categories %}
+	                     	<li><a href="{{url_for('blog.show_category', slug=category.slug)}}">{{category.name}}</a></li>
+	                     	{% endfor %}
+	                  	</ul>
+	                  {% endif %}
+	               </li>   
+	               <li><a href="{{url_for('blog.about')}}">About</a></li>	
+	            	{% block nav %}{% endblock %}
+			   	</ul> <!-- end #nav -->			   	 
+
+	   	</div> 
+
+	   </nav> <!-- end #nav-wrap --> 	     
+
+   </header> <!-- Header End -->
+	{% endblock %}
+
+	{% block body %}
+
+	   <!-- Content
+   ================================================== -->
+   <div id="content-wrap">
+   	{% block full_width %}
+   	{% endblock %}
+   	<div class="row">
+   		
+   		<div id="main" class="eight columns">
+   			{% block content %}			
+			{% endblock %}
+   		</div> <!-- end main -->
+   		
+   		{% block sidebar %}
+   		<div id="sidebar" class="four columns">
+
+   			<div class="widget widget_search">
+                  <h3>Search</h3> 
+                  <form action="{{url_for('blog.search')}}">
+                     <input type="text" name="q" value="Search here..." onblur="if(this.value == '') { this.value = 'Search here...'; }" onfocus="if (this.value == 'Search here...') { this.value = ''; }" class="text-search">
+                     <input type="submit" value="" class="submit-search">
+                  </form>
+               </div>
+
+   			<div class="widget widget_categories group">
+   				<h3>Categories.</h3> 
+   				<ul>
+   						{% for category in categories %}
+						<li><a href="{{url_for('blog.show_category', slug=category.slug)}}" title="">{{category.name}}</a> ({{category.posts|length}})</li>			
+						{% endfor %}
+					</ul>
+				</div>
+
+				<div class="widget widget_text group">
+					<h3>Widget Text.</h3>
+
+   				<p>Lorem ipsum Ullamco commodo laboris sit dolore commodo aliquip incididunt fugiat esse dolor aute fugiat minim eiusmod do velit labore fugiat officia ad sit culpa labore in consectetur sint cillum sint consectetur voluptate adipisicing Duis irure magna ut sit amet reprehenderit.</p>
+
+   			</div>
+
+   			<div class="widget widget_tags">
+               <h3>Post Tags.</h3>
+
+               <div class="tagcloud group">
+               		{% for tag in tags %}
+                  <a href="{{url_for('blog.show_tag', slug=tag.slug)}}">{{tag.name}}</a>
+                  {% endfor %}
+               </div>
+                  
+            </div>
+
+            <div class="widget widget_popular">
+               <h3>Popular Post.</h3>
+
+               <ul class="link-list">
+               	{% for post in popular_posts %}
+                  <li><a href="{{url_for('blog.single_post', slug=post.slug)}}">{{post.title}}</a></li>
+                {% endfor %}                     
+               </ul>
+                  
+            </div>
+   			
+   		</div> <!-- end sidebar -->
+   		{% endblock %}
+   	</div> <!-- end row -->
+
+   </div> <!-- end content-wrap -->
+   {% block footer %}
+   	   <footer>
+
+      <div class="row"> 
+
+      	<div class="twelve columns">	
+      		{% if links %}
+				<ul class="social-links">
+				{% for link in links %}
+					{% if link.name == 'Facebook' %}
+	               <li><a href="{{link.url}}"><i class="fa fa-facebook"></i></a></li>
+	               {% endif %}
+	               {% if link.name == 'Twitter'  %}
+	               <li><a href="{{link.url}}"><i class="fa fa-twitter"></i></a></li>
+	               {% endif %}
+	               {% if link.name == 'Google' or link.name == 'Google+' %}
+	               <li><a href="{{link.url}}"><i class="fa fa-google-plus"></i></a></li> 
+	               {% endif %}
+	               {% if link.name == 'Square' %}              
+	               <li><a href="{{link.url}}"><i class="fa fa-github-square"></i></a></li>
+	               {% endif %}
+	               {% if link.name == 'Instagram' %}
+	               <li><a href="{{link.url}}"><i class="fa fa-instagram"></i></a></li>
+	               {% endif %}
+	               {% if link.name == 'Flickr' %}
+	               <li><a href="{{link.url}}"><i class="fa fa-flickr"></i></a></li> 
+	               {% endif %}
+	               {% if link.name == 'Skype' %}              
+	               <li><a href="{{link.url}}"><i class="fa fa-skype"></i></a></li>
+	               {% endif %}
+	               {% if link.name != 'Facebook' and link.name != 'Google' and link.name != 'Twitter' and link.name != 'Square' and link.name != 'Flickr' and link.name != 'Skype' %}
+	               <li><a href="{{link.url}}"><i class="fa fa-link"></i></a></li>
+	               {% endif %}
+               {% endfor %}
+            </ul>		
+            {% endif %}	
+      	</div>
+      	
+         <div class="six columns info">
+
+            <h3>About Keep It Simple</h3> 
+
+            <p>This is Photoshop's version  of Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet.
+            Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem
+            nibh id elit. 
+            </p>
+
+            <p>Lorem ipsum Sed nulla deserunt voluptate elit occaecat culpa cupidatat sit irure sint 
+            sint incididunt cupidatat esse in Ut sed commodo tempor consequat culpa fugiat incididunt.</p>
+
+         </div>
+
+         <div class="four columns">
+
+            <h3>Photostream</h3>
+            
+            <ul class="photostream group">
+               <li><a href="#"><img alt="thumbnail" src="{{ url_for('static', filename='blog/images/thumb.jpg')}}"></a></li>
+               <li><a href="#"><img alt="thumbnail" src="{{ url_for('static', filename='blog/images/thumb.jpg')}}"></a></li>
+               <li><a href="#"><img alt="thumbnail" src="{{ url_for('static', filename='blog/images/thumb.jpg')}}"></a></li>
+               <li><a href="#"><img alt="thumbnail" src="{{ url_for('static', filename='blog/images/thumb.jpg')}}"></a></li>
+               <li><a href="#"><img alt="thumbnail" src="{{ url_for('static', filename='blog/images/thumb.jpg')}}"></a></li>
+               <li><a href="#"><img alt="thumbnail" src="{{ url_for('static', filename='blog/images/thumb.jpg')}}"></a></li>
+               <li><a href="#"><img alt="thumbnail" src="{{ url_for('static', filename='blog/images/thumb.jpg')}}"></a></li>
+               <li><a href="#"><img alt="thumbnail" src="{{ url_for('static', filename='blog/images/thumb.jpg')}}"></a></li>
+            </ul>           
+
+         </div>
+
+         <div class="two columns">
+            <h3 class="social">Navigate</h3>
+
+            <ul class="navigate group">
+               <li><a href="#">Home</a></li>
+               <li><a href="#">Blog</a></li>
+               <li><a href="#">Demo</a></li>
+               <li><a href="#">Archives</a></li>
+               <li><a href="#">About</a></li>
+            </ul>
+         </div>
+
+         <p class="copyright">&copy; Copyright 2014 Keep It Simple. &nbsp; Design by <a title="Styleshout" href="http://www.styleshout.com/">Styleshout</a>.</p>
+        
+      </div> <!-- End row -->
+
+      <div id="go-top"><a class="smoothscroll" title="Back to Top" href="#top"><i class="fa fa-chevron-up"></i></a></div>
+
+   </footer> <!-- End Footer-->
+   {% endblock %}
+
+   {% block scripts %}
+   	   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	   <script>window.jQuery || document.write('<script src="js/jquery-1.10.2.min.js"><\/script>')</script>
+	   <script type="text/javascript" src="{{ url_for('static', filename='blog/js/jquery-migrate-1.2.1.min.js')}}"></script>  
+	   <script src="{{ url_for('static', filename='blog/js/main.js')}}"></script>
+	   {{ moment.include_moment(local_js=url_for('static', filename='js/moment-with-locales.min.js')) }}
+   {% endblock %}
+	{% endblock %}
+</body>
+</html>
